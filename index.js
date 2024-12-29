@@ -4,7 +4,7 @@ const { Sequelize, Model, DataTypes, Op } = require("sequelize");
 const cors = require("cors");
 const Joi = require("joi");
 const app = express();
-const port = 8000;
+const port = 5000;
 
 app.use(cors({ credentials: true, origin: "*" }));
 app.use(express.json());
