@@ -60,7 +60,7 @@ app.get("/users", async (req, res) => {
   const users = await User.findAll({
     where: {
       name: {
-        [Op.like]: `%${name}%`, // Find usernames containing 'john'
+        [Op.like]: `%${name ?? ""}%`, // Find usernames containing 'john'
       },
     },
   });
