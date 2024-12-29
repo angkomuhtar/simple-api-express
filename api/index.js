@@ -51,6 +51,10 @@ const userSchema = Joi.object({
   image: Joi.string().required(),
 });
 
+app.get("/", async (req, res) => {
+  res.send("Express API - Technical test");
+});
+
 app.get("/users", async (req, res) => {
   const { name } = req.query;
   const users = await User.findAll({
