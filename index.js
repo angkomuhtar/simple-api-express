@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 // Create Sequelize instance
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: "../database.sqlite",
+  storage: "./database.sqlite",
 });
 
 // Define User model
