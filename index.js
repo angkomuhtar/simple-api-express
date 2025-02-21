@@ -29,6 +29,16 @@ User.init(
   },
   { sequelize, modelName: "user" }
 );
+class Reserve extends Model {}
+
+Reserve.init(
+  {
+    nama: DataTypes.STRING,
+    kehadiran: DataTypes.STRING,
+    pesan: DataTypes.STRING,
+  },
+  { sequelize, modelName: "reserve", timestamps: true }
+);
 sequelize.sync();
 
 const userSchema = Joi.object({
@@ -51,6 +61,12 @@ const userSchema = Joi.object({
   image: Joi.string().required(),
 });
 
+const reserveSchema = Joi.object({
+  nama: Joi.string().required(),
+  kehadiran: Joi.string().required(),
+  pesan: Joi.string().required(),
+});
+
 app.get("/", async (req, res) => {
   res.send("Express API - Technical test");
 });
@@ -69,6 +85,42 @@ app.get("/users", async (req, res) => {
     message: "get data successfull",
     data: users,
   });
+});
+
+app.get("/tamu", async (req, res) => {
+  const { name } = req.query;
+  const users = await Reserve.findAll({
+    order: [["createdAt", "DESC"]],
+    limit: 5,
+  });
+  res.json({
+    success: true,
+    message: "get data successfull",
+    data: users,
+  });
+});
+
+app.post("/tamu", async (req, res) => {
+  try {
+    const { error, value } = reserveSchema.validate(req.body);
+
+    if (error) {
+      return res.status(422).json({ error: error.details[0].message });
+    }
+
+    const newUser = await Reserve.create(req.body);
+    res.status(201).json({
+      success: true,
+      message: "Store data successfull",
+      data: newUser,
+    });
+  } catch (error) {
+    // Handle specific Sequelize errors
+    return res.status(400).json({
+      error: "Error",
+      details: error.errors ?? error.message,
+    });
+  }
 });
 
 app.get("/users/:id", async (req, res) => {
